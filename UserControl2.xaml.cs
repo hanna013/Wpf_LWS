@@ -39,6 +39,7 @@ namespace Wpf_LWS
             }
 
             dataGrid.ItemsSource = list;    // datagrid와 list를 이렇게 연결해줘야 함.
+            Console.WriteLine();
         }
 
     }
