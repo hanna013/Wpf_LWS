@@ -22,6 +22,8 @@ namespace Wpf_LWS
     public partial class UserControl2 : UserControl
     {
 
+        List<int> selected = new List<int>();
+
         public UserControl2()
         {
             InitializeComponent();
@@ -39,9 +41,43 @@ namespace Wpf_LWS
             }
 
             dataGrid.ItemsSource = list;    // datagrid와 list를 이렇게 연결해줘야 함.
-            Console.WriteLine();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //삭제 버튼
+            selected.Sort();
+            selected.Reverse(); // 인덱스 역방향으로 정렬. 순서 섞여서 중간 인덱스부터 삭제되면 나머지 삭제해야 할 데이터의 인덱스가 달라져서 오류 생김.
+
+
+
+            foreach (int i in selected)
+            {
+                DB.DB_Scn_X.RemoveAt(i);
+                DB.DB_Scn_Y.RemoveAt(i);
+                DB.DB_Cmr_X.RemoveAt(i);
+                DB.DB_Cmr_Y.RemoveAt(i);
+                DB.Derived_X.RemoveAt(i);
+                DB.Derived_Y.RemoveAt(i);
+            }
+            
+            selected.Clear();
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+            selected.Add(dataGrid.SelectedIndex); // foreach로 해서 중간 것 삭제하면 index가 바뀌면서 예외처리로 넘어감.
+            lb1.Content = dataGrid.SelectedIndex; // selected.Last(); // 체크박스할 때 추가되는지 확인용.
+            //lb1.
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            selected.Remove(dataGrid.SelectedIndex); // remove를 써야 그 내용에 해당하는 값을 지움. removeAt 말고!
+            
+        }
     }
 
     public class Display
